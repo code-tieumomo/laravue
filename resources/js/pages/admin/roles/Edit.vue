@@ -133,12 +133,6 @@ const submit = () => {
                             {{ user.email }}
                         </TableCell>
                         <TableCell class="text-center">
-                            <!-- Go to user detail -->
-                            <!-- <Link :href="route('admin.roles.edit', role.id)">
-                                <Button size="icon" class="mr-2">
-                                    <Pencil class="size-4" />
-                                </Button>
-                            </Link> -->
                             <AlertDialog>
                                 <AlertDialogTrigger>
                                     <Button size="icon" variant="destructive">
