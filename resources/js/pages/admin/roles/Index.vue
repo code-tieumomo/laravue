@@ -51,12 +51,17 @@ const deleteRole = (role: Role) => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-semibold">Roles</h1>
+                <div class="space-y-0.5">
+                    <h2 class="text-xl font-semibold tracking-tight">Roles</h2>
+                    <p class="text-muted-foreground text-sm">Manage user roles</p>
+                </div>
                 <div>
-                    <Button>
-                        <Plus class="mr-2 size-4" />
-                        Create Role
-                    </Button>
+                    <Link :href="route('admin.roles.create')">
+                        <Button>
+                            <Plus class="mr-2 size-4" />
+                            Create Role
+                        </Button>
+                    </Link>
                 </div>
             </div>
             <Table>
@@ -65,6 +70,8 @@ const deleteRole = (role: Role) => {
                         <TableHead class="w-[100px]">#</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Guard</TableHead>
+                        <TableHead class="text-center">Users</TableHead>
+                        <TableHead class="text-center">Permissions</TableHead>
                         <TableHead>Created At</TableHead>
                         <TableHead>Updated At</TableHead>
                         <TableHead class="w-[100px] text-center">Actions</TableHead>
@@ -80,6 +87,12 @@ const deleteRole = (role: Role) => {
                             <Badge>
                                 {{ role.guard_name }}
                             </Badge>
+                        </TableCell>
+                        <TableCell class="text-center">
+                            {{ role.users_count }}
+                        </TableCell>
+                        <TableCell class="text-center">
+                            {{ role.permissions_count }}
                         </TableCell>
                         <TableCell>{{ dayjs(role.created_at).format('YYYY-MM-DD HH:MM:ss') }}</TableCell>
                         <TableCell>{{ dayjs(role.updated_at).format('YYYY-MM-DD HH:MM:ss') }}</TableCell>

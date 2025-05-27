@@ -12,16 +12,44 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::all();
+        $roles = Role::withCount('permissions')
+            ->withCount('users')
+            ->get();
 
         return inertia('admin/roles/Index', [
             'roles' => $roles,
         ]);
     }
 
+    public function create()
+    {
+        $permissions = Permission::all();
+
+        return inertia('admin/roles/Create', [
+            'permissions' => $permissions,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,name',
+        ]);
+
+        $name = $request->input('name');
+        $permissions = $request->input('permissions', []);
+
+        $role = Role::create(['name' => $name]);
+        $role->syncPermissions($permissions);
+
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
+    }
+
     public function edit(Role $role)
     {
-        $role->load('permissions');
+        $role->load('permissions', 'users');
 
         $permissions = Permission::all();
 
@@ -34,7 +62,7 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:roles,name,' . $role->id,
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,name',
         ]);

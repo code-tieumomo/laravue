@@ -1,12 +1,24 @@
 <script setup lang="ts">
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem, Permission, Role, SharedData } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { Check } from 'lucide-vue-next';
+import { Check, CircleMinus } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 
 const props = defineProps<{
@@ -59,7 +71,10 @@ const submit = () => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-semibold">Edit Role: {{ role.name.toUpperCase() }}</h1>
+                <div class="space-y-0.5">
+                    <h2 class="text-xl font-semibold tracking-tight">Edit Role: {{ role.name.toUpperCase() }}</h2>
+                    <p class="text-muted-foreground text-sm">Update the role details and permissions</p>
+                </div>
                 <div>
                     <Button @click="submit">
                         <Check class="mr-2 size-4" />
@@ -90,6 +105,67 @@ const submit = () => {
                     </div>
                 </div>
             </form>
+
+            <hr class="my-4" />
+
+            <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                    <h2 class="text-xl font-semibold tracking-tight">Users</h2>
+                    <p class="text-muted-foreground text-sm">List of users assigned to this role</p>
+                </div>
+            </div>
+            <Table v-if="role.users.length > 0">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead class="w-[100px]">#</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead class="w-[100px] text-center">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    <TableRow v-for="(user, index) in role.users" :key="role.id">
+                        <TableCell class="font-medium">
+                            {{ index + 1 }}
+                        </TableCell>
+                        <TableCell class="font-bold uppercase">{{ user.name }}</TableCell>
+                        <TableCell>
+                            {{ user.email }}
+                        </TableCell>
+                        <TableCell class="text-center">
+                            <!-- Go to user detail -->
+                            <!-- <Link :href="route('admin.roles.edit', role.id)">
+                                <Button size="icon" class="mr-2">
+                                    <Pencil class="size-4" />
+                                </Button>
+                            </Link> -->
+                            <AlertDialog>
+                                <AlertDialogTrigger>
+                                    <Button size="icon" variant="destructive">
+                                        <CircleMinus class="size-4" />
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently detach user <strong>{{ user.name }}</strong> from role
+                                            <strong>{{ role.name }}</strong>.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction>Delete</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            <p v-else class="text-muted-foreground text-sm italic">
+                No users are currently assigned to this role.
+            </p>
         </div>
     </AppLayout>
 </template>
