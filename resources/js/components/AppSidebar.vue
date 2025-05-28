@@ -34,7 +34,7 @@ const mainNavGroups: NavGroup[] = [
             },
             {
                 title: 'Permissions',
-                href: '/permissions',
+                href: route('admin.permissions.index'),
                 icon: Lock,
             },
         ],
