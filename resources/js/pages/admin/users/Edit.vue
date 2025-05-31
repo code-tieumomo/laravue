@@ -112,7 +112,7 @@ const submit = () => {
                                 :model-value="form.roles.includes(role.name)"
                                 @update:model-value="handleRoleChange($event, role.name)"
                             />
-                            <Label :for="`role-${role.id}`">{{ role.name }}</Label>
+                            <Label :for="`role-${role.id}`" class="uppercase">{{ role.name }}</Label>
                         </div>
                     </div>
                 </div>

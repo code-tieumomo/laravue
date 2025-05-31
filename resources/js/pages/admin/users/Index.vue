@@ -86,7 +86,7 @@ const deleteUser = (user: User) => {
                         <TableCell>{{ user.email }}</TableCell>
                         <TableCell class="text-center">
                             <div class="flex flex-wrap justify-center gap-1">
-                                <Badge v-for="role in user.roles" :key="role.id" variant="secondary">
+                                <Badge v-for="role in user.roles" :key="role.id" variant="secondary" class="uppercase">
                                     {{ role.name }}
                                 </Badge>
                                 <span v-if="!user.roles || user.roles.length === 0" class="text-muted-foreground text-sm">No roles</span>
