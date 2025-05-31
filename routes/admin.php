@@ -2,9 +2,18 @@
 
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/admin')->group(function () {
+    Route::prefix('/users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/create', [UserController::class, 'create'])->name('admin.users.create');
+        Route::post('/', [UserController::class, 'store'])->name('admin.users.store');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/{user}', [UserController::class, 'update'])->name('admin.users.update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    });
     Route::prefix('/roles')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('admin.roles.index');
         Route::get('/create', [RoleController::class, 'create'])->name('admin.roles.create');

@@ -24,7 +24,7 @@ const mainNavGroups: NavGroup[] = [
         items: [
             {
                 title: 'Users',
-                href: '/users',
+                href: route('admin.users.index'),
                 icon: Users,
             },
             {

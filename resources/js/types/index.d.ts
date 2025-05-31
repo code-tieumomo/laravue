@@ -39,6 +39,8 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    roles_count?: number;
+    roles?: Role[];
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
