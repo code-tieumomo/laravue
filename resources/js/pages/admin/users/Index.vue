@@ -13,6 +13,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useAuth } from '@/composables/useAuth';
+import { PERMISSIONS } from '@/constants/auth';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem, User } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
@@ -23,6 +25,9 @@ import { toast } from 'vue-sonner';
 defineProps<{
     users: User[];
 }>();
+
+// Use the auth composable for permission checks
+const { hasPermission } = useAuth();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -56,7 +61,7 @@ const deleteUser = (user: User) => {
                     <p class="text-muted-foreground text-sm">Manage system users</p>
                 </div>
                 <div>
-                    <Link :href="route('admin.users.create')">
+                    <Link v-if="hasPermission(PERMISSIONS.USER_CREATE)" :href="route('admin.users.create')">
                         <Button>
                             <Plus class="mr-2 size-4" />
                             Create User
@@ -100,12 +105,12 @@ const deleteUser = (user: User) => {
                         <TableCell>{{ dayjs(user.created_at).format('YYYY-MM-DD HH:MM:ss') }}</TableCell>
                         <TableCell>{{ dayjs(user.updated_at).format('YYYY-MM-DD HH:MM:ss') }}</TableCell>
                         <TableCell>
-                            <Link :href="route('admin.users.edit', user.id)">
+                            <Link v-if="hasPermission(PERMISSIONS.USER_UPDATE)" :href="route('admin.users.edit', user.id)">
                                 <Button size="icon" class="mr-2">
                                     <Pencil class="size-4" />
                                 </Button>
                             </Link>
-                            <AlertDialog>
+                            <AlertDialog v-if="hasPermission(PERMISSIONS.USER_DELETE)">
                                 <AlertDialogTrigger>
                                     <Button size="icon" variant="destructive">
                                         <Trash2 class="size-4" />
