@@ -100,6 +100,9 @@ A modern, full-stack starter kit built with Laravel 12 and Vue.js 3, featuring a
 
     # In another terminal, start Laravel server
     php artisan serve
+
+    # Or you can use single command with Composer and `concurrently`
+    composer run dev
     ```
 
 8. **Access the application**
